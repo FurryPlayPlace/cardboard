@@ -120,6 +120,15 @@ public class ReflectionMethodVisitor extends MethodVisitor {
             // super.visitMethodInsn( Opcodes.INVOKESTATIC, "org/cardboardpowered/util/nms/ReflectionRemapper", name, desc, false );
             // return;
         }
+
+        if (owner.contains("net/ess3") && owner.contains("com/earth2me/")) {
+        	System.out.println(owner + " / " + name);
+        }
+        
+        if (owner.startsWith("org/bukkit/craftbukkit") && owner.contains(ReflectionRemapper.NMS_VERSION)) {
+        	System.out.println("Stripping version package (" + ReflectionRemapper.NMS_VERSION + ") from org/bukkit/craftbukkit reference.");
+        	owner = owner.replace("org/bukkit/craftbukkit/" + ReflectionRemapper.NMS_VERSION + "/", "org/bukkit/craftbukkit/");
+        }
         
         if (owner.startsWith("net/minecraft") && name.equals("getMinecraftServer")) {
             super.visitMethodInsn( Opcodes.INVOKESTATIC, "org/cardboardpowered/util/nms/ReflectionRemapper", "getNmsServer", desc, false );
@@ -128,7 +137,7 @@ public class ReflectionMethodVisitor extends MethodVisitor {
         }
 
         if (owner.startsWith("net/minecraft") && name.equals("getServer")) {
-            super.visitMethodInsn( Opcodes.INVOKESTATIC, "com/javazilla/bukkitfabric/nms/ReflectionRemapper", "getNmsServer", desc, false );
+            super.visitMethodInsn( Opcodes.INVOKESTATIC, "org/cardboardpowered/util/nms/ReflectionRemapper", "getNmsServer", desc, false );
             System.out.println(owner + " " + name + " " + desc);
             return;
         }
