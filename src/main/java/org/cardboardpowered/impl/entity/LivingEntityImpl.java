@@ -1023,6 +1023,30 @@ public class LivingEntityImpl extends CraftEntity implements LivingEntity {
 	public void setBodyYaw(float arg0) {
         this.getHandle().setBodyYaw(arg0);
 	}
+
+	@Override
+	public int getNoActionTicks() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setNoActionTicks(int ticks) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean clearActivePotionEffects() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void playHurtAnimation(float yaw) {
+		// TODO Auto-generated method stub
+		
+	}
    
 
 }

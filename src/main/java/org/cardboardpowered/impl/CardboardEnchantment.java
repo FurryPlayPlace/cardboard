@@ -4,11 +4,16 @@ import net.kyori.adventure.text.Component;
 import net.minecraft.enchantment.BindingCurseEnchantment;
 import net.minecraft.enchantment.VanishingCurseEnchantment;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 
 import java.util.Set;
-
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
+import org.bukkit.craftbukkit.CraftRegistry;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftNamespacedKey;
+import org.bukkit.craftbukkit.util.Handleable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.enchantments.EnchantmentWrapper;
@@ -19,13 +24,25 @@ import org.jetbrains.annotations.NotNull;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
 
-public class CardboardEnchantment extends Enchantment {
+public class CardboardEnchantment extends Enchantment implements Handleable<net.minecraft.enchantment.Enchantment> {
 
     private final net.minecraft.enchantment.Enchantment target;
 
+    private final NamespacedKey key;
+    private final net.minecraft.enchantment.Enchantment handle;
+    private final int id;
+    
+    public CardboardEnchantment(NamespacedKey key, net.minecraft.enchantment.Enchantment handle) {
+    	super(CraftNamespacedKey.fromMinecraft(Registries.ENCHANTMENT.getId(handle)));
+        this.key = key;
+        this.handle = handle;
+        this.id = Registries.ENCHANTMENT.getRawId(handle);
+        this.target = handle;
+    }
+    
+    @Deprecated
     public CardboardEnchantment(net.minecraft.enchantment.Enchantment target) {
-        super(CraftNamespacedKey.fromMinecraft(Registries.ENCHANTMENT.getId(target)));
-        this.target = target;
+    	this(CraftNamespacedKey.fromMinecraft(Registries.ENCHANTMENT.getId(target)), target);
     }
 
     @Override
@@ -229,6 +246,16 @@ public class CardboardEnchantment extends Enchantment {
     public @NotNull String translationKey() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+	public static Enchantment minecraftHolderToBukkit(
+			RegistryEntry<net.minecraft.enchantment.Enchantment> id) {
+		// TODO Auto-generated method stub
+		return CardboardEnchantment.minecraftToBukkit(id.value());
+	}
+
+	public static Enchantment minecraftToBukkit(net.minecraft.enchantment.Enchantment minecraft) {
+        return CraftRegistry.minecraftToBukkit(minecraft, RegistryKeys.ENCHANTMENT, Registry.ENCHANTMENT);
     }
 
 }

@@ -19,6 +19,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.structure.Mirror;
 import org.bukkit.block.structure.StructureRotation;
 import org.bukkit.craftbukkit.block.CraftBlock;
+import org.bukkit.craftbukkit.block.CraftBlockStates;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftLocation;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +30,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableSet;
+import com.javazilla.bukkitfabric.BukkitFabricMod;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -36,6 +39,8 @@ import net.minecraft.block.AbstractBlock.AbstractBlockState;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.command.argument.BlockArgumentParser;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
@@ -47,7 +52,40 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+// <<<<<<< HEAD
 import net.minecraft.registry.Registries;
+// ======
+/*
+import net.minecraft.world.EmptyBlockView;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.SoundGroup;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockSupport;
+import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.structure.Mirror;
+import org.bukkit.block.structure.StructureRotation;
+import org.bukkit.craftbukkit.CraftSoundGroup;
+import org.bukkit.craftbukkit.block.CraftBlock;
+import org.bukkit.craftbukkit.block.CraftBlockStates;
+import org.bukkit.craftbukkit.block.CraftBlockSupport;
+import org.bukkit.craftbukkit.block.CraftBlockType;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.util.CraftLocation;
+import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+import org.bukkit.inventory.ItemStack;
+import org.cardboardpowered.BlockImplUtil;
+import org.cardboardpowered.impl.world.WorldImpl;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+*/
+// >>>>>>> ccc00fa (Update Paper-API to 1.20.1)
 
 public class CraftBlockData implements BlockData {
 
@@ -664,4 +702,30 @@ public class CraftBlockData implements BlockData {
 	        return PistonMoveReaction.getById((int)this.state.getPistonBehavior().ordinal());
 	    }
 
+// <<<<<<< HEAD
+// }
+// =======
+		@Override
+		public org.bukkit.block.@NotNull BlockState createBlockState() {
+			BukkitFabricMod.LOGGER.info("CraftBlockStates not implemented");
+			return null;
+			// return CraftBlockStates.getBlockState(this.state, null);
+		}
+
+		@Override
+		public float getDestroySpeed(@NotNull ItemStack itemStack, boolean considerEnchants) {
+	        int enchantLevel;
+	        net.minecraft.item.ItemStack nmsItemStack = CraftItemStack.unwrap(itemStack);
+	        float speed = nmsItemStack.getMiningSpeedMultiplier(this.state);
+	        if (speed > 1.0f && considerEnchants && (enchantLevel = EnchantmentHelper.getLevel(Enchantments.EFFICIENCY, nmsItemStack)) > 0) {
+	            speed += (float)(enchantLevel * enchantLevel + 1);
+	        }
+	        return speed;
+		}
+
+		public static CraftBlockData createData(BlockState nms) {
+			return fromData(nms);
+		}
+
 }
+// >>>>>>> ccc00fa (Update Paper-API to 1.20.1)

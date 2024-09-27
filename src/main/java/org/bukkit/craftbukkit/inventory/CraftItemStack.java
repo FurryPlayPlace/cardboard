@@ -18,6 +18,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 import org.cardboardpowered.impl.CardboardEnchantment;
+//<<<<<<< HEAD
+//=======
+// import org.cardboardpowered.interfaces.IItemStack;
+import org.jetbrains.annotations.NotNull;
+//>>>>>>> ccc00fa (Update Paper-API to 1.20.1)
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Dynamic;
@@ -593,4 +598,19 @@ public final class CraftItemStack extends ItemStack {
         return !(item == null || item.getNbt() == null || item.getNbt().isEmpty());
     }
 
+//<<<<<<< HEAD
+//=======
+    public static net.minecraft.item.ItemStack unwrap(ItemStack bukkit) {
+        if (bukkit instanceof CraftItemStack) {
+            CraftItemStack craftItemStack = (CraftItemStack)bukkit;
+            return craftItemStack.handle != null ? craftItemStack.handle : net.minecraft.item.ItemStack.EMPTY;
+        }
+        return CraftItemStack.asNMSCopy(bukkit);
+    }
+
+    /*static boolean hasItemMeta(net.minecraft.item.ItemStack item) {
+        return !(item == null || item.getNbt() == null || item.getNbt().isEmpty());
+    }*/
+
+//>>>>>>> ccc00fa (Update Paper-API to 1.20.1)
 }

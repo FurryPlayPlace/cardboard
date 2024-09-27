@@ -10,16 +10,27 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.craftbukkit.util.CraftNamespacedKey;
+import org.bukkit.craftbukkit.util.Handleable;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-public class CardboardPotionEffectType extends PotionEffectType {
+public class CardboardPotionEffectType extends PotionEffectType implements Handleable<StatusEffect> {
 
+    private final NamespacedKey key;
     private final StatusEffect handle;
+    private final int id;
 
+    public CardboardPotionEffectType(NamespacedKey key, StatusEffect handle) {
+    	super(Registries.STATUS_EFFECT.getRawId(handle), CraftNamespacedKey.fromMinecraft(Registries.STATUS_EFFECT.getId(handle)));
+    	this.key = key;
+    	this.handle = handle;
+        this.id = Registries.STATUS_EFFECT.getRawId(handle) + 1;
+    }
+    
     public CardboardPotionEffectType(StatusEffect handle) {
-        super(StatusEffect.getRawId(handle), CraftNamespacedKey.fromMinecraft(Registries.STATUS_EFFECT.getId(handle)));
-        this.handle = handle;
+        this(CraftNamespacedKey.fromMinecraft(Registries.STATUS_EFFECT.getId(handle)), handle);
+    	// super(StatusEffect.getRawId(handle), CraftNamespacedKey.fromMinecraft(Registries.STATUS_EFFECT.getId(handle)));
+        //this.handle = handle;
     }
 
     @Override

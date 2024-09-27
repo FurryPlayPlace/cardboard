@@ -12,6 +12,7 @@ import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
+import org.cardboardpowered.impl.CardboardEnchantment;
 import org.cardboardpowered.impl.inventory.CardboardEnchantingInventory;
 import org.cardboardpowered.impl.inventory.CardboardInventoryView;
 import org.cardboardpowered.util.MixinInfo;
@@ -44,7 +45,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.collection.IndexedIterable;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 
 // MixinInfo(events = {"PrepareItemEnchantEvent", "EnchantItemEvent"})
 @Mixin(EnchantmentScreenHandler.class)
@@ -177,7 +181,9 @@ public class MixinEnchantmentScreenHandler extends MixinScreenHandler {
             this.context.run((world, blockposition) -> {
                 ItemStack itemstack2 = itemstack;
                 List<EnchantmentLevelEntry> list = this.generateEnchantments(itemstack, i, this.enchantmentPower[i]);
+                IndexedIterable<RegistryEntry<net.minecraft.enchantment.Enchantment>> registry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getIndexedEntries();
 
+                
                 boolean flag = itemstack.getItem() == Items.BOOK;
                 Map<org.bukkit.enchantments.Enchantment, Integer> enchants = new java.util.HashMap<org.bukkit.enchantments.Enchantment, Integer>();
                 for (Object obj : list) {
@@ -186,7 +192,16 @@ public class MixinEnchantmentScreenHandler extends MixinScreenHandler {
                 }
                 CraftItemStack item = CraftItemStack.asCraftMirror(itemstack2);
 
-                EnchantItemEvent event = new EnchantItemEvent((Player) ((IMixinEntity)entityhuman).getBukkitEntity(), this.getBukkitView(), ((IMixinScreenHandlerContext)context).getLocation().getBlock(), item, this.enchantmentPower[i], enchants, i);
+                org.bukkit.enchantments.Enchantment hintedEnchantment = CardboardEnchantment.minecraftHolderToBukkit(registry.get(this.enchantmentId[i]));
+                int hintedEnchantmentLevel = this.enchantmentLevel[i];
+                
+                // EnchantItemEvent event = new EnchantItemEvent((Player)player.getBukkitEntity(), (InventoryView)this.getBukkitView(), this.context.getLocation().getBlock(), (ItemStack)item, this.enchantmentPower[id], enchants, hintedEnchantment, hintedEnchantmentLevel, id);
+
+                
+                EnchantItemEvent event = new EnchantItemEvent(
+                		(Player) ((IMixinEntity)entityhuman).getBukkitEntity(), this.getBukkitView(),
+                		((IMixinScreenHandlerContext)context).getLocation().getBlock(), item, this.enchantmentPower[i],
+                		enchants, hintedEnchantment, hintedEnchantmentLevel, i);
                 Bukkit.getPluginManager().callEvent(event);
 
                 int level = event.getExpLevelCost();

@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 import net.fabricmc.loader.api.FabricLoader;
-
 import me.isaiah.config.FileConfiguration;
 
 public class CardboardConfig {

@@ -18,8 +18,8 @@ gversion {
 }
 project.compileJava.dependsOn(createVersionFile)
 
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -42,6 +42,7 @@ repositories {
     maven { url = 'https://repo.codemc.io/repository/maven-releases/' }
 	maven { url = 'https://repo.spongepowered.org/maven' }
 	maven { url = 'https://maven.izzel.io/releases' }
+	maven { url = 'https://repo.papermc.io/repository/maven-public/' }
     mavenCentral()
 }
 
@@ -87,8 +88,20 @@ dependencies {
     extraLibs("org.yaml:snakeyaml:1.33")
 
     // 
-    compileOnly fileTree(dir: 'libs', include: "${project.paper_jar}")
-    //extraLibs fileTree(dir: 'libs', include: "${project.paper_jar}")
+    //compileOnly fileTree(dir: 'libs', include: "${project.paper_jar}")
+    
+	// Paper-API
+	// compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-20230608.201059-104")
+	compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-20230921.165944-178")
+	
+	// Paper-API libs
+	compileOnly("net.md-5:bungeecord-chat:1.16-R0.4")
+	compileOnly("net.kyori:adventure-api:4.13.0")
+	compileOnly("net.kyori:adventure-text-serializer-gson:4.13.0")
+	compileOnly("net.kyori:adventure-text-serializer-legacy:4.13.0")
+	compileOnly("net.kyori:adventure-text-serializer-plain:4.13.0")
+
+	//extraLibs fileTree(dir: 'libs', include: "${project.paper_jar}")
     compileOnly fileTree(dir: 'libs', include: 'commons-lang-2.6.jar')
     //compileOnly fileTree(dir: 'libs', include: 'slf4j.jar')
     compileOnly group: "org.jetbrains", name: "annotations", version: "18.0.0"
@@ -128,8 +141,8 @@ configurations.implementation {
 }
 
 configure([tasks.compileJava]) {
-    sourceCompatibility = 16 // for the IDE support
-    options.release = 16
+    sourceCompatibility = 17 // for the IDE support
+    options.release = 17
 
     javaCompiler = javaToolchains.compilerFor {
         languageVersion = JavaLanguageVersion.of(17)
