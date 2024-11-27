@@ -27,6 +27,7 @@
     "MixinTimeCommand",
     "MixinTradeOffer",
     "MixinUserCache",
+    "MixinSimplePluginManager",
     "block.MixinAbstractCandleBlock",
     "block.MixinBambooBlock",
     "block.MixinBambooSaplingBlock",

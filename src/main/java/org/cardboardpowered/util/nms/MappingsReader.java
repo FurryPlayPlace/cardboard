@@ -94,8 +94,12 @@ public class MappingsReader {
         });
     }
 
-    @Deprecated
     public static String getIntermedClass(String spigot) {
+        return com.mohistmc.banner.bukkit.nms.utils.RemapUtils.map(spigot);
+    }
+
+    @Deprecated
+    public static String getIntermedClass_old(String spigot) {
         return dev(MAPPINGS.getNewClass(spigot).getName());
     }
 
